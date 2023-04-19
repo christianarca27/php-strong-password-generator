@@ -1,13 +1,9 @@
 <?php
 
-include './partials/functions.php';
-
-$passwordLength = (int) ($_GET['password-len'] ?? 0);
-
-$password = generateRandomPassword($passwordLength);
+// Apro la sessione per avere accesso alla password generata che voglio stampare
+session_start();
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="it">
@@ -24,11 +20,11 @@ $password = generateRandomPassword($passwordLength);
     <div class="container">
         <h1>Password Generator</h1>
 
-        <form action="index.php" method="get">
+        <form action="generatePassword.php" method="get">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Lunghezza password</span>
                 <input type="number" min="4" name="password-len" id="password-len" class="form-control"
-                    aria-describedby="basic-addon1">
+                    aria-describedby="basic-addon1" required>
             </div>
 
             <button class="btn btn-primary" type="submit">Genera</button>
@@ -36,11 +32,12 @@ $password = generateRandomPassword($passwordLength);
 
         <p>
             <?php
-            if ($passwordLength >= 4) {
-                echo "Password generata: " . $password;
-            } else {
-                echo "Numero di caratteri non sufficienti";
+
+            // Se la password non è vuota(perché è la prima volta che apro la pagina) la stampo a video
+            if (!empty($_SESSION['generatedPassword'])) {
+                echo "Password generata: " . $_SESSION['generatedPassword'];
             }
+
             ?>
         </p>
 
